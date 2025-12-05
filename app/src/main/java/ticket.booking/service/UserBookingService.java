@@ -28,21 +28,21 @@ public class UserBookingService {
 
 
     }
-    public Boolean loginUser(){
-        Optional<User> foundUser = userList.stream().filter(user1 -> {
-            return user1.getName().equals(user.getName()) && UserServiceUtil.checkPassword(user.getPassword(), user1.getHashedPassword());
-        }).findFirst();
-        return foundUser.isPresent();
-    }
-
-    public Boolean signUp(User user1){
-        try{
-            userList.add(user1);
-            saveUserListToFile();
-            return Boolean.TRUE;
-        }catch (IOException ex){
-            return Boolean.FALSE;
-        }
-    }
+//    public Boolean loginUser(){
+//        Optional<User> foundUser = userList.stream().filter(user1 -> {
+//            return user1.getName().equals(user.getName()) && UserServiceUtil.checkPassword(user.getPassword(), user1.getHashedPassword());
+//        }).findFirst();
+//        return foundUser.isPresent();
+//    }
+//
+//    public Boolean signUp(User user1){
+//        try{
+//            userList.add(user1);
+//            saveUserListToFile();
+//            return Boolean.TRUE;
+//        }catch (IOException ex){
+//            return Boolean.FALSE;
+//        }
+//    }
 
 }

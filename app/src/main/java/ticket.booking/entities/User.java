@@ -1,7 +1,16 @@
 package ticket.booking.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import ticket.booking.service.TrainService;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
 
     private String name;
@@ -64,6 +73,41 @@ public class User {
     public void printTickets(){
         for (int i = 0; i<ticketsBooked.size(); i++){
             System.out.println(ticketsBooked.get(i).getTicketInfo());
+        }
+    }
+
+
+    public List<Train> getTrains(String source, String destination){
+        try{
+            TrainService trainService = new TrainService();
+            return trainService.searchTrains(source, destination);
+        }catch(IOException ex){
+            return new ArrayList<>();
+        }
+    }
+
+    public List<List<Integer>> fetchSeats(Train train){
+        return train.getSeats();
+    }
+
+    public Boolean bookTrainSeat(Train train, int row, int seat) {
+        try{
+            TrainService trainService = new TrainService();
+            List<List<Integer>> seats = train.getSeats();
+            if (row >= 0 && row < seats.size() && seat >= 0 && seat < seats.get(row).size()) {
+                if (seats.get(row).get(seat) == 0) {
+                    seats.get(row).set(seat, 1);
+                    train.setSeats(seats);
+                    trainService.addTrain(train);
+                    return true; // Booking successful
+                } else {
+                    return false; // Seat is already booked
+                }
+            } else {
+                return false; // Invalid row or seat index
+            }
+        }catch (IOException ex){
+            return Boolean.FALSE;
         }
     }
 
